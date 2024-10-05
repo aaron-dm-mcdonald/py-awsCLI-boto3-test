@@ -1,8 +1,17 @@
 #!/bin/bash
 
-# entry_point.sh
+# entry-point.sh
+#------------------------------------------------------------------
+# This script sets up the environment, makes necessary scripts executable,
+# and runs the py-check script. If successful, it runs the boto3-auth-test.py script.
 
-# Function to determine the OS and set commands for Python and pip
+# Function to handle errors
+handle_error() {
+    echo "Error: $1"
+    exit 1
+}
+
+# Function to check OS type and set Python and Pip commands
 os_check() {
     if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
         echo "python pip"
@@ -11,24 +20,41 @@ os_check() {
     fi
 }
 
-# Get Python and pip commands for the shell script
-commands=$(os_check)
-read -r python_cmd pip_cmd <<< "$commands"
+# Make the scripts executable
+make_scripts_executable() {
+    chmod +x py-check.sh
+    chmod +x boto3-auth-test.py  # Change this to your actual Python script name
+    echo "Scripts made executable."
+}
 
-# Run the shell script with the Python and pip commands
-./py-check.sh "$python_cmd" "$pip_cmd"
-status=$?
+# Main function
+main() {
+    read python_cmd pip_cmd < <(os_check)
 
-# Check if the shell script ran successfully
-if [ $status -eq 0 ]; then
-    echo "Shell script ran successfully. Now launching boto3-auth-test.py..."
+    echo "Using commands: Python = $python_cmd, Pip = $pip_cmd"
+   
 
-    # Get the same Python command for executing the Python script
-    commands=$(os_check)
-    read -r python_cmd _ <<< "$commands"  # We only need the Python command here
+    # Make scripts executable
+    make_scripts_executable
+    echo 
 
-    $python_cmd boto3-auth-test.py  # Adjust the path if needed
-else
-    echo "Shell script encountered an error. Exiting."
-    exit $status
-fi
+    # Execute the py-check script with determined commands
+    if ./py-check.sh "$python_cmd" "$pip_cmd"; then
+        echo "py-check.sh completed successfully."
+        
+        # Execute the boto3-auth-test.py script
+        echo "Running boto3-auth-test.py..."
+        echo
+        python ./"boto3-auth-test.py"  # Ensure it's in the same directory or provide a path
+        
+    else
+        echo "py-check.sh encountered an error."
+        exit 1
+    fi
+
+    echo
+    echo "All processes completed successfully!"
+}
+
+# Execute the main function
+main

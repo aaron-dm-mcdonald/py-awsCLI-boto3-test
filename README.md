@@ -19,7 +19,7 @@ This script containers 3 scripts:
 
 1) Clone repo with:  ```git clone https://github.com/aaron-dm-mcdonald/py-awsCLI-boto3-test.git```
 2) ```cd py-awsCLI-boto3-test/test```
-3) execute: ```chmod +x py-check.sh entry-point.sh boto3-auth-test.py```
+3) execute: ```chmod +x entry-point.sh```
 4) execute: ```./entry-point.sh```
 
 ## Notes

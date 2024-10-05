@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# install.sh 
+# py-check.sh 
 #------------------------------------------------------------------
 # This script installs boto3 and the schedule module, checking if they are already installed.
 
@@ -143,8 +143,7 @@ main() {
     local python_cmd="$1"
     local pip_cmd="$2"
 
-    # Debugging output
-    echo "Using commands: Python = $python_cmd, Pip = $pip_cmd"
+
 
     # Check Python and pip
     check_python_and_pip "$python_cmd" "$pip_cmd"
