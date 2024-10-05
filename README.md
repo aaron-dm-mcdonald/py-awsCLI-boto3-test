@@ -15,6 +15,14 @@ This script containers 3 scripts:
     - Python script that imports boto3 to test module import functionality 
     - Creates IAM client and interacts with AWS APIs to verify authentication 
 
+## Directions
+
+1) Clone repo with
+    - ```git clone 
+2) move into the test directory 
+3) chmod +x py-check.sh entry-point.sh boto3-auth-test.py
+4) ./entry-point.sh
+
 
 ## Project Structure
 
@@ -35,4 +43,4 @@ This script containers 3 scripts:
         - entry-point.sh
         - py-check.sh
 
-        
+
