@@ -32,18 +32,8 @@ check_aws_cli_config() {
         default_region=$(awk -F " = " '/region/ {print $2}' ~/.aws/config | tr -d ' ')
         output_format=$(awk -F " = " '/output/ {print $2}' ~/.aws/config | tr -d ' ')
 
-        if [[ -n "$key_id" ]]; then
-            echo "AWS Access Key ID: ****${key_id: -4}"
-        else
-            echo "AWS Access Key ID not found."
-        fi
-
-        if [[ -n "$secret_key" ]]; then
-            echo "AWS Secret Access Key: ****${secret_key: -4}"
-        else
-            echo "AWS Secret Access Key not found."
-        fi
-
+        [[ -n "$key_id" ]] && echo "AWS Access Key ID: ****${key_id: -4}" || echo "AWS Access Key ID not found."
+        [[ -n "$secret_key" ]] && echo "AWS Secret Access Key: ****${secret_key: -4}" || echo "AWS Secret Access Key not found."
         [[ -n "$default_region" ]] && echo "Default Region: $default_region" || echo "Default Region not found."
         [[ -n "$output_format" ]] && echo "Output Format: $output_format" || echo "Output Format not found."
     else
@@ -113,6 +103,23 @@ list_installed_packages() {
     echo
 }
 
+# Function to check and upgrade pip if needed
+check_and_upgrade_pip() {
+    local pip_cmd="$1"
+    echo "Checking if $pip_cmd needs upgrading..."
+
+    current_version=$($pip_cmd --version | awk '{print $2}')
+    latest_version=$($pip_cmd install --upgrade pip --dry-run | grep 'from' | awk '{print $NF}')
+
+    if [[ "$current_version" != "$latest_version" ]]; then
+        echo "Upgrading pip from version $current_version to $latest_version..."
+        $pip_cmd install --upgrade pip || handle_error "Failed to upgrade pip."
+    else
+        echo "pip is up to date (version $current_version)."
+    fi
+    echo
+}
+
 # Function to check if boto3 and schedule are installed
 check_and_install_packages() {
     local pip_cmd="$1"
@@ -141,6 +148,9 @@ main() {
 
     # Check Python and pip
     check_python_and_pip "$python_cmd" "$pip_cmd"
+
+    # Check and upgrade pip
+    check_and_upgrade_pip "$pip_cmd"
 
     # Verify Python functionality
     check_python_functionality "$python_cmd"

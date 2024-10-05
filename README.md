@@ -22,6 +22,13 @@ This script containers 3 scripts:
 3) execute: ```chmod +x py-check.sh entry-point.sh boto3-auth-test.py```
 4) execute: ```./entry-point.sh```
 
+## Notes
+
+```python -m pip install --upgrade pip```
+
+```pip uninstall <python packages in venv/"editable project location">```
+
+```pip show boto3```
 
 ## Project Structure
 
