@@ -32,8 +32,18 @@ check_aws_cli_config() {
         default_region=$(awk -F " = " '/region/ {print $2}' ~/.aws/config | tr -d ' ')
         output_format=$(awk -F " = " '/output/ {print $2}' ~/.aws/config | tr -d ' ')
 
-        [[ -n "$key_id" ]] && echo "AWS Access Key ID: $key_id" || echo "AWS Access Key ID not found."
-        [[ -n "$secret_key" ]] && echo "AWS Secret Access Key: $secret_key" || echo "AWS Secret Access Key not found."
+        if [[ -n "$key_id" ]]; then
+            echo "AWS Access Key ID: ****${key_id: -4}"
+        else
+            echo "AWS Access Key ID not found."
+        fi
+
+        if [[ -n "$secret_key" ]]; then
+            echo "AWS Secret Access Key: ****${secret_key: -4}"
+        else
+            echo "AWS Secret Access Key not found."
+        fi
+
         [[ -n "$default_region" ]] && echo "Default Region: $default_region" || echo "Default Region not found."
         [[ -n "$output_format" ]] && echo "Output Format: $output_format" || echo "Output Format not found."
     else
