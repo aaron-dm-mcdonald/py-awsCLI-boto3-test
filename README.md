@@ -33,4 +33,4 @@ This script containers 3 scripts:
     - test/
         - boto3-auth-test.py
         - entry-point.sh
-        - py-check.sh# Python, AWS CLI Utility, boto3 install and auth checks
+        - py-check.sh
